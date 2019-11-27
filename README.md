@@ -12,7 +12,11 @@ go build .
 
 **使用本软件需要一个百度大脑语音应用ID。**
 
-首先把百度大脑语音应用ID写入下面形式的JSON文件（例如：app.json）：
+### 二进制程序下载
+[百度网盘](https://pan.baidu.com/s/103cgeSFOmPZFvVZOQYdDPw)
+
+### 使用方法
+首先申请百度大脑语音应用，然后把百度大脑语音应用ID写入下面形式的JSON文件（例如：app.json）：
 ```
 {
 	"AppID":"xxxxxx",
