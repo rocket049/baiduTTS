@@ -105,6 +105,20 @@
         <button onclick='play()' id='playBtn'>准备中</button>
         <button onclick='pause()'>暂停</button>
         <button onclick='cancel()'>取消</button>
+        <input type='file' accept='text/plain' onchange='openFile(event)'>
+        <script type="text/javascript">
+        var openFile = function(event) {
+            var input = event.target;
+            var reader = new FileReader();
+            reader.onload = function() {
+                if(reader.result) {
+                    document.getElementById("text").value = reader.result;
+                    //alert(reader.result);
+                }
+            };
+            reader.readAsText(input.files[0]);
+        };
+    </script>
     </div>
 </body>
 </html>
