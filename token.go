@@ -27,8 +27,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
+	"time"
 )
 
 type TTSApi struct {
@@ -37,7 +40,27 @@ type TTSApi struct {
 	Scope   string `json:"scope"`
 }
 
+func verifyTokTxt(fn string) bool {
+	info, err := os.Stat(fn)
+	if err != nil {
+		return false
+	}
+	if time.Now().Add(time.Hour * 24 * 20).Before(info.ModTime()) {
+		return false
+	}
+	return true
+}
+
 func getToken(apiKey, secretKey string) (token string, expires int64, err error) {
+	if verifyTokTxt("tok.txt") == true {
+		var data []byte
+		data, err = ioutil.ReadFile("tok.txt")
+		if err != nil {
+			panic(err)
+		}
+		token = string(data)
+		return
+	}
 	url1 := fmt.Sprintf("https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=%s&client_secret=%s",
 		apiKey, secretKey)
 	r, err := http.Get(url1)
@@ -56,6 +79,7 @@ func getToken(apiKey, secretKey string) (token string, expires int64, err error)
 	//log.Println(*res)
 	if strings.Contains(res.Scope, "audio_tts_post") {
 		token = res.Token
+		ioutil.WriteFile("tok.txt", []byte(token), 0644)
 		expires = res.Expires
 		err = nil
 	} else {

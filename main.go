@@ -10,16 +10,13 @@ import (
 	"net"
 	"net/http"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/skratchdot/open-golang/open"
 )
 
 var token string
-
-func ServeBaiduTtsJS(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, filepath.Join("tmpls", "baidu_tts_cors.js"))
-}
 
 func ServeTts(w http.ResponseWriter, r *http.Request) {
 	tpl, err := template.ParseFiles(filepath.Join("tmpls", "demo.html"))
@@ -58,7 +55,14 @@ func main() {
 	}
 	defer l.Close()
 	http.HandleFunc("/tts", ServeTts)
-	http.HandleFunc("/baidu_tts_cors.js", ServeBaiduTtsJS)
+	fsHandler := http.StripPrefix("/static", http.FileServer(http.Dir("static")))
+	http.HandleFunc("/static/", func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasSuffix(r.URL.Path, ".wasm") {
+			w.Header().Set("content-type", "application/wasm")
+		}
+		fsHandler.ServeHTTP(w, r)
+	})
+
 	fmt.Println("URL: http://localhost:10000/tts")
 
 	go func() {
