@@ -16,41 +16,6 @@
         playBtn = document.getElementById('playBtn');
     });
 
-    // 合成按钮
-    function tts() {
-        let text = document.getElementById('text').value;
-        playBtn.innerText = '准备中';
-
-        // 调用语音合成接口
-        // 参数含义请参考 https://ai.baidu.com/docs#/TTS-API/41ac79a6
-        audio = btts({
-            tex: text,
-            tok: '{{.Token}}',
-            spd: 5,
-            pit: 5,
-            vol: 15,
-            per: 106
-        }, {
-            volume: 0.8,
-            autoDestory: false,
-            timeout: 10000,
-            hidden: false,
-            onInit: function (htmlAudioElement) {
-
-            },
-            onSuccess: function(htmlAudioElement) {
-                audio = htmlAudioElement;
-                playBtn.innerText = '播放';
-            },
-            onError: function(text) {
-                alert(text)
-            },
-            onTimeout: function () {
-                alert('timeout')
-            }
-        });
-    }
-    
     // wasm合成
     function ttsWasm(s) {
         let text = s;
@@ -66,7 +31,7 @@
             vol: 15,
             per: 106
         }, {
-            volume: 0.3,
+            volume: 0.8,
             autoDestory: false,
             timeout: 10000,
             hidden: false,
