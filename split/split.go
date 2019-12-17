@@ -113,7 +113,7 @@ func saveSection(data []byte, num int) {
 }
 
 func getBreakPos(data []rune, max int) (pos int) {
-	const ends1 = `。！？“”?!."'`
+	const ends1 = `。！？?!.`
 	runes1 := bytes.Runes([]byte(ends1))
 	pos = max
 	for {
