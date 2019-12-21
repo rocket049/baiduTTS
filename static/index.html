@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>语音合成</title>
+  <style>
+  textarea{
+    width:100%;
+    max-width:640px;
+  }
+  </style>
+  <script type="text/javascript" src="baidu_tts_cors.js"></script>
+  <script type="text/javascript">
+
+    // 初始化变量
+    var audio = null;
+    var playBtn = null;
+
+    // dom加载完毕回调后注册按钮对象
+    ready(function() {
+        playBtn = document.getElementById('playBtn');
+    });
+
+    // wasm合成
+    function ttsWasm(s) {
+        let text = s;
+        playBtn.innerText = '准备中';
+
+        // 调用语音合成接口
+        // 参数含义请参考 https://ai.baidu.com/docs#/TTS-API/41ac79a6
+        btts({
+            tex: text,
+            tok: document.getElementById("token").value,
+            spd: 5,
+            pit: 5,
+            vol: 15,
+            per: 106
+        }, {
+            volume: 0.8,
+            autoDestory: false,
+            timeout: 10000,
+            hidden: false,
+            onInit: function (htmlAudioElement) {
+
+            },
+            onSuccess: function(htmlAudioElement) {
+                audio = htmlAudioElement;
+                playBtn.innerText = '播放';
+                var timer1 = setTimeout(function(){
+                      document.nextSection();
+                    }, 1000);
+                
+            },
+            onError: function(text) {
+                alert(text)
+            },
+            onTimeout: function () {
+                alert('timeout')
+            }
+        });
+    }
+
+    // 播放按钮
+    function play() {
+        if (audio === null) {
+            alert('请先点击合成')
+        } else {
+            audio.play();
+        }
+    }
+
+    // 暂停按钮
+    function pause() {
+        if (audio === null) {
+            alert('请先点击合成')
+        } else {
+            audio.pause();
+        }
+    }
+
+    // 取消按钮
+    function cancel() {
+        if (audio === null) {
+            alert('请先点击合成')
+        } else {
+            audio.pause();
+            document.body.removeChild(audio);
+            audio = null;
+            playBtn.innerText = '准备中';
+        }
+    }
+
+    // dom加载完毕回调
+    function ready(callback){
+        var doc = document;
+        if (doc.addEventListener) {
+            doc.addEventListener('DOMContentLoaded', function() {
+                callback();
+            }, false);
+        } else if (doc.attachEvent) {
+            doc.attachEvent('onreadystatechange', function() {
+                if (doc.readyState === 'complete') {
+                    callback();
+                }
+            });
+        }
+    }
+  </script>
+</head>
+<body>
+    <div>
+        Token: <input type='input' id='token' size=30/><br/>
+        <textarea id='text' style='height:500px;'>百度语音合成</textarea><br/>
+        <button onclick='submitMsg()'>合成</button>
+        <button onclick='play()' id='playBtn'>准备中</button>
+        <button onclick='pause()'>暂停</button>
+        <button onclick='cancel()'>取消</button>
+        <input type='file' accept='text/plain' onchange='openFile(event)'>
+        <script type="text/javascript">
+        var openFile = function(event) {
+            var input = event.target;
+            var reader = new FileReader();
+            reader.onload = function() {
+                if(reader.result) {
+                    document.getElementById("text").value = reader.result;
+                    //alert(reader.result);
+                }
+            };
+            reader.readAsText(input.files[0]);
+        };
+    </script>
+    </div>
+    <script src="wasm_exec.js"></script>
+	<script>
+	const go = new Go();
+		if (!WebAssembly.instantiateStreaming) { // polyfill
+			WebAssembly.instantiateStreaming = async (resp, importObject) => {
+				const source = await (await resp).arrayBuffer();
+				return await WebAssembly.instantiate(source, importObject);
+			};
+		}
+		WebAssembly.instantiateStreaming(fetch("split.wasm"), go.importObject).then(async (result) => {
+			await go.run(result.instance)
+		}).catch((err) => {
+			console.error(err);
+		});
+	</script>
+</body>
+</html>

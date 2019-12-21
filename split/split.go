@@ -25,6 +25,7 @@ func main() {
 	registerFunc("submitMsg", submitMsg)
 	registerFunc("nextSection", nextSection)
 	go ttsLoop()
+	getElementById("text").Set("value", "split/wasm loaded!")
 	ch = make(chan int, 1)
 	ch <- 1
 	select {}
