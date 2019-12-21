@@ -47,7 +47,7 @@
         }, {
             volume: 0.8,
             autoDestory: false,
-            timeout: 10000,
+            timeout: 60000,
             hidden: false,
             onInit: function (htmlAudioElement) {
 
@@ -62,9 +62,15 @@
             },
             onError: function(text) {
                 alert(text)
+                var timer1 = setTimeout(function(){
+                      document.nextSection();
+                    }, 1000);
             },
             onTimeout: function () {
                 alert('timeout')
+                var timer1 = setTimeout(function(){
+                      document.nextSection();
+                    }, 1000);
             }
         });
     }
