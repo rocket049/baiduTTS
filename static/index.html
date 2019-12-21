@@ -26,12 +26,20 @@
     function ttsWasm(s) {
         let text = s;
         playBtn.innerText = '准备中';
+        let token1=document.getElementById("token").value;
+        if (token1.length==0) {
+          alert("Input token first!");
+          var timer1 = setTimeout(function(){
+                      document.nextSection();
+                    }, 1000);
+          return
+        }
 
         // 调用语音合成接口
         // 参数含义请参考 https://ai.baidu.com/docs#/TTS-API/41ac79a6
         btts({
             tex: text,
-            tok: document.getElementById("token").value,
+            tok: token1,
             spd: 5,
             pit: 5,
             vol: 15,
