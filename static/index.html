@@ -104,6 +104,11 @@
             playBtn.innerText = '准备中';
         }
     }
+    
+    // 清除按钮
+    function clearTxt(){
+      document.getElementById("text").value="";
+    }
 
     // dom加载完毕回调
     function ready(callback){
@@ -130,6 +135,7 @@
         <button onclick='play()' id='playBtn'>准备中</button>
         <button onclick='pause()'>暂停</button>
         <button onclick='cancel()'>取消</button>
+        <button onclick='clearTxt()'>清除</button>
         <input type='file' accept='text/plain' onchange='openFile(event)'>
         <script type="text/javascript">
         var openFile = function(event) {
