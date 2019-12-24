@@ -4,6 +4,9 @@
 ```
 git clone https://github.com/rocket049/baiduTTS.git
 cd baiduTTS
+cd ../split
+make
+cd ..
 go build .
 ```
 
@@ -30,4 +33,4 @@ go build .
 ./baiduTTS -i /path/to/app.json
 ```
 
-**运行后会自动打开浏览器，在页面输入框中输入文字，点击“合成”即可，注意文字数不可过多，字数最好不超过2000个，否则可能失败。**
+**运行后会自动打开浏览器，在页面输入框中输入文字，点击“合成”即可，超过2000字时自动分段。**
