@@ -13,6 +13,7 @@ var ch chan int
 
 func consoleLog(s string) {
 	js.Global().Get("console").Call("log", s)
+	js.Global().Get("document").Call("getElementById", "text").Set("value", s)
 }
 func registerFunc(fname string, fn func(js.Value, []js.Value) interface{}) {
 	js.Global().Get("document").Set(fname, js.ValueOf(js.FuncOf(fn)))
@@ -65,7 +66,7 @@ func split(s string) {
 			break
 		}
 		line1 = bytes.TrimSpace(line1)
-		line1 = regex1.ReplaceAll(line1, []byte("."))
+		line1 = regex1.ReplaceAll(line1, []byte("!"))
 		runes1 := bytes.Runes(line1)
 		lsize := len(runes1)
 		if lsize == 0 {
@@ -90,7 +91,7 @@ func split(s string) {
 				buf.WriteRune(runes1[i])
 			}
 		}
-		buf.WriteByte('.')
+		buf.WriteByte('!')
 		secSize += lsize + 1
 	}
 }
