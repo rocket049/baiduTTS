@@ -48,6 +48,7 @@ func verifyTokTxt(fn string) bool {
 	if time.Now().Add(time.Hour * 24 * 20).Before(info.ModTime()) {
 		return false
 	}
+
 	return true
 }
 
