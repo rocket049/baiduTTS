@@ -95,6 +95,14 @@
     function clearTxt(){
       document.getElementById("text").value="";
     }
+    // 清除 audio
+    function clearAudios(){
+      let audios = document.getElementsByTagName("audio");
+      for(i=audios.length-1;i>=0;i--){
+        let a=audios[i];
+        document.body.removeChild(a);
+      }
+    }
 
     // dom加载完毕回调
     function ready(callback){
@@ -120,7 +128,8 @@
         <button onclick='play()' id='playBtn'>准备中</button>
         <button onclick='pause()'>暂停</button>
         <button onclick='cancel()'>取消</button>
-        <button onclick='clearTxt()'>清除</button>
+        <button onclick='clearTxt()'>清除文字</button>
+        <button onclick='clearAudios()'>清除音频</button>
         <input type='file' accept='text/plain' onchange='openFile(event)'>
         <script type="text/javascript">
         var openFile = function(event) {
