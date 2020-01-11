@@ -112,6 +112,9 @@
     // 清除 audio
     function clearAudios(){
       let audios = document.getElementsByTagName("audio");
+      if (confirm("是否清除所有音频？")==false) {
+        return;
+      }
       for(i=audios.length-1;i>=0;i--){
         let a=audios[i];
         document.body.removeChild(a);
