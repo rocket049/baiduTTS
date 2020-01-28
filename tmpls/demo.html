@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>语音合成</title>
+  <link rel="stylesheet" type="text/css" href="/static/tts.css" />
   <script type="text/javascript" src="/static/baidu_tts_cors.js"></script>
   <script type="text/javascript">
 
@@ -126,7 +127,7 @@
   </script>
 </head>
 <body>
-    <div>
+    <div><div>Token: <b>{{.Token}}</b></div>
         <textarea id='text' style='width: 800px;height:500px;'>百度语音合成</textarea><br/>
         <button onclick='submitMsg()'>合成</button>
         <button onclick='play()' id='playBtn'>准备中</button>
