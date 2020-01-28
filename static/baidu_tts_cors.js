@@ -13,6 +13,8 @@
  *           onTimeout {Function} 超时后调用，默认超时时间为60秒
  */
 
+var audioID=1;
+
 function btts(param, options) {
     var url = 'https://tsn.baidu.com/text2audio';
     var opt = options || {};
@@ -64,7 +66,6 @@ function btts(param, options) {
     for(var k in data) {
         fd.push(k + '=' + encodeURIComponent(data[k]));
     }
-	console.log(fd.join('&'));
     // 用来处理blob数据
     var frd = new FileReader();
     xhr.responseType = 'blob';
@@ -81,11 +82,20 @@ function btts(param, options) {
             clearTimeout(timer);
             if (xhr.status == 200) {
                 if (xhr.response.type === 'audio/mp3') {
-
-                    // 在body元素下apppend音频控件
-                    document.body.appendChild(audio);
-                    var blob1 = xhr.response;
-                    audio.setAttribute('src', URL.createObjectURL(blob1));                    
+					// 在body元素下apppend音频控件
+					var blob1 = xhr.response;
+					audio.setAttribute('src', URL.createObjectURL(blob1));
+					var div1 = document.createElement('div');
+					let id1='a'+audioID;
+					div1.setAttribute('id',id1);
+					div1.setAttribute('name','diva');
+					audioID++;
+					div1.appendChild(audio);
+					var button1 = document.createElement('button');
+					button1.innerHTML='X';
+					button1.onclick=function(){document.body.removeChild(div1);};
+					div1.appendChild(button1);
+					document.body.appendChild(div1);            
 
                     // autoDestory设置则播放完后移除audio的dom对象
                     if (opt.autoDestory) {
