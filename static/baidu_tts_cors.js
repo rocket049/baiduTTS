@@ -14,7 +14,7 @@
  */
 
 function btts(param, options) {
-    var url = 'http://tsn.baidu.com/text2audio';
+    var url = 'https://tsn.baidu.com/text2audio';
     var opt = options || {};
     var p = param || {};
 
@@ -54,7 +54,7 @@ function btts(param, options) {
     }
 
     // 赋值预定义参数
-    data.cuid = data.cuid || data.tok;
+    data.cuid = "fa";
     data.ctp = 1;
     data.lan = data.lan || 'zh';
     data.aue = data.aue || 3;
@@ -64,7 +64,7 @@ function btts(param, options) {
     for(var k in data) {
         fd.push(k + '=' + encodeURIComponent(data[k]));
     }
-
+	console.log(fd.join('&'));
     // 用来处理blob数据
     var frd = new FileReader();
     xhr.responseType = 'blob';

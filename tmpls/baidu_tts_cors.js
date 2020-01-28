@@ -13,7 +13,7 @@
  *           onTimeout {Function} 超时后调用，默认超时时间为60秒
  */
 function btts(param, options) {
-    var url = 'http://tsn.baidu.com/text2audio';
+    var url = 'https://tsn.baidu.com/text2audio';
     var opt = options || {};
     var p = param || {};
 
@@ -57,6 +57,8 @@ function btts(param, options) {
     data.ctp = 1;
     data.lan = data.lan || 'zh';
     data.aue = data.aue || 3;
+    
+    console.log(data.tok);
 
     // 序列化参数列表
     var fd = [];
