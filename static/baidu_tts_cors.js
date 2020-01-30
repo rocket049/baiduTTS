@@ -95,7 +95,8 @@ function btts(param, options) {
 					button1.innerHTML='X';
 					button1.onclick=function(){document.body.removeChild(div1);};
 					div1.appendChild(button1);
-					document.body.appendChild(div1);            
+					audio.addEventListener('play',function(){div1.setAttribute('style','background-color:#A6A6A6');},false);
+					document.body.appendChild(div1);
 
                     // autoDestory设置则播放完后移除audio的dom对象
                     if (opt.autoDestory) {
