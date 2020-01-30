@@ -115,6 +115,12 @@ function btts(param, options) {
                     };
                     frd.readAsText(xhr.response);
                 }
+            } else {
+        		   frd.onload = function(){
+                    var text = frd.result;
+                    isFunction(opt.onError) && opt.onError(text);
+                };
+                frd.readAsText(xhr.response);
             }
         }
     }
