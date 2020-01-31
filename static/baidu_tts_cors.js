@@ -96,7 +96,12 @@ function btts(param, options) {
 					button1.onclick=function(){document.body.removeChild(div1);};
 					div1.appendChild(button1);
 					audio.addEventListener('play',function(){div1.setAttribute('style','background-color:#A6A600');},false);
-					audio.addEventListener('ended',function(){div1.setAttribute('style','background-color:#A6A6FF');},false);
+					audio.addEventListener('ended',function(){
+						div1.setAttribute('style','background-color:#A6A6FF');
+						if(div1.nextSibling!=undefined){
+							div1.nextSibling.childNodes[0].play();
+						}
+						},false);
 					document.body.appendChild(div1);
 
                     // autoDestory设置则播放完后移除audio的dom对象
