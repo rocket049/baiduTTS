@@ -29,6 +29,7 @@ func main() {
 	getElementById("text").Set("value", "split/wasm loaded!")
 	ch = make(chan int, 1)
 	ch <- 1
+	getElementById("hecheng").Set("disabled", "")
 	select {}
 }
 
