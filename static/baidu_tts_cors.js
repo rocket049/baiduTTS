@@ -120,6 +120,9 @@ function btts(param, options) {
                         var text = frd.result;
                         isFunction(opt.onError) && opt.onError(text);
                     };
+                    frd.onerror = function(){
+                    	   isFunction(opt.onError) && opt.onError(frd.error.message);
+                    }
                     frd.readAsText(xhr.response);
                 }
             } else {
@@ -127,6 +130,9 @@ function btts(param, options) {
                     var text = frd.result;
                     isFunction(opt.onError) && opt.onError(text);
                 };
+                frd.onerror = function(){
+                	   isFunction(opt.onError) && opt.onError(frd.error.message);
+                }
                 frd.readAsText(xhr.response);
             }
         }
