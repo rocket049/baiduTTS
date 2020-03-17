@@ -68,6 +68,8 @@ func split(s string) {
 			break
 		}
 		line1 = bytes.TrimSpace(line1)
+		line1 = bytes.ReplaceAll(line1, []byte("<"), []byte("."))
+		line1 = bytes.ReplaceAll(line1, []byte(">"), []byte("."))
 		line1 = regex1.ReplaceAll(line1, []byte("!"))
 		runes1 := bytes.Runes(line1)
 		lsize := len(runes1)
