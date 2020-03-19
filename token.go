@@ -29,7 +29,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 )
@@ -40,26 +39,42 @@ type TTSApi struct {
 	Scope   string `json:"scope"`
 }
 
-func verifyTokTxt(fn string) bool {
-	info, err := os.Stat(fn)
-	if err != nil {
-		return false
-	}
-	if time.Now().Add(time.Hour * 24 * 10).Before(info.ModTime()) {
-		return false
-	}
+type TokenFile struct {
+	Token     string `json:"token"`
+	Timestamp int64  `json:"timestamp"`
+}
 
-	return true
+func verifyGetTokFile(fn string) (string, bool) {
+	data, err := ioutil.ReadFile(fn)
+	if err != nil {
+		return "", false
+	}
+	var tokfile TokenFile
+	err = json.Unmarshal(data, &tokfile)
+	if err != nil {
+		return "", false
+	}
+	tm1 := time.Unix(tokfile.Timestamp, 0)
+	if tm1.Add(time.Hour * 24 * 10).Before(time.Now()) {
+		return "", false
+	} else {
+		return tokfile.Token, true
+	}
+}
+
+func saveTokFile(tok, fn string) {
+	var tokfile TokenFile
+	tokfile.Token = tok
+	tokfile.Timestamp = time.Now().Unix()
+	data, err := json.Marshal(&tokfile)
+	if err == nil {
+		ioutil.WriteFile(fn, data, 0644)
+	}
 }
 
 func getToken(apiKey, secretKey string) (token string, expires int64, err error) {
-	if verifyTokTxt("tok.txt") == true {
-		var data []byte
-		data, err = ioutil.ReadFile("tok.txt")
-		if err != nil {
-			panic(err)
-		}
-		token = string(data)
+	if tok, ok := verifyGetTokFile("tok.txt"); ok == true {
+		token = tok
 		return
 	}
 	url1 := fmt.Sprintf("https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=%s&client_secret=%s",
@@ -80,7 +95,7 @@ func getToken(apiKey, secretKey string) (token string, expires int64, err error)
 	//log.Println(*res)
 	if strings.Contains(res.Scope, "audio_tts_post") {
 		token = res.Token
-		ioutil.WriteFile("tok.txt", []byte(token), 0644)
+		saveTokFile(res.Token, "tok.txt")
 		expires = res.Expires
 		err = nil
 	} else {
