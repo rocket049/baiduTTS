@@ -89,6 +89,7 @@ function btts(param, options) {
 					let id1='a'+audioID;
 					div1.setAttribute('id',id1);
 					div1.setAttribute('name','diva');
+					div1.setAttribute('title',id1);
 					audioID++;
 					div1.appendChild(audio);
 					var button1 = document.createElement('button');
